@@ -19,17 +19,19 @@ module Api
     end
 
     # get member's entries
+    # /member/:id/entries?limit=0&skip=30
     get '/member/:id/entries' do
       @entries = Api::Entry.where("member_id = ?", params[:id])
-                .where("id > ?", params[:skip].present? ? params[:skip] : 0)
+                .offset(params[:skip].present? ? params[:skip] : 0)
                 .limit(params[:limit].present? ? params[:limit] : 30)
                 .order(published: :desc)
       jbuilder :entries
     end
 
     # get all entries
+    # /entries?limit=0&skip=30
     get '/entries' do
-      @entries = Api::Entry.where("id > ?", params[:skip].present? ? params[:skip] : 0)
+      @entries = Api::Entry.offset(params[:skip].present? ? params[:skip] : 0)
                 .limit(params[:limit].present? ? params[:limit] : 30)
                 .order(published: :desc)
       jbuilder :entries
