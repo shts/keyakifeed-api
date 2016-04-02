@@ -1,4 +1,5 @@
 require 'bundler'
+require 'kconv'
 Bundler.require
 
 module Api
@@ -21,6 +22,9 @@ module Api
     # get member's entries
     # /member/:id/entries?limit=0&skip=30
     get '/member/:id/entries' do
+      #文字コード指定してやらないと日本語が化ける
+    	content_type :json, :charset => 'utf-8'
+
       @entries = Api::Entry.where("member_id = ?", params[:id])
                 .offset(params[:skip].present? ? params[:skip] : 0)
                 .limit(params[:limit].present? ? params[:limit] : 30)
@@ -31,6 +35,9 @@ module Api
     # get all entries
     # /entries?limit=0&skip=30
     get '/entries' do
+      #文字コード指定してやらないと日本語が化ける
+    	content_type :json, :charset => 'utf-8'
+
       @entries = Api::Entry.offset(params[:skip].present? ? params[:skip] : 0)
                 .limit(params[:limit].present? ? params[:limit] : 30)
                 .order(published: :desc)
