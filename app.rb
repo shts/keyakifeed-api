@@ -20,12 +20,12 @@ module Api
     end
 
     # get member's entries
-    # /member/:id/entries?limit=0&skip=30
-    get '/member/:id/entries' do
+    # /member/entries?id[]=1&id[]=2&limit=0&skip=30
+    get '/member/entries' do
       #文字コード指定してやらないと日本語が化ける
     	content_type :json, :charset => 'utf-8'
 
-      @entries = Api::Entry.where("member_id = ?", params[:id])
+      @entries = Api::Entry.where(member_id: params[:id])
                 .offset(params[:skip].present? ? params[:skip] : 0)
                 .limit(params[:limit].present? ? params[:limit] : 30)
                 .order(published: :desc)
