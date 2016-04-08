@@ -19,13 +19,23 @@ module Api
       Api::Member.all.to_json
     end
 
+    # get member
+    get '/members/:id' do
+      member = Api::Member.find_by_id(params[:id])
+      if member == nil then
+        404
+      else
+        member.to_json
+      end
+    end
+
     # get member's entries
     # /member/entries?id[]=1&id[]=2&limit=0&skip=30
     get '/member/entries' do
       #文字コード指定してやらないと日本語が化ける
     	content_type :json, :charset => 'utf-8'
 
-      @entries = Api::Entry.where(member_id: params[:id])
+      @entries = Api::Entry.where(member_id: params[:ids])
                 .offset(params[:skip].present? ? params[:skip] : 0)
                 .limit(params[:limit].present? ? params[:limit] : 30)
                 .order(published: :desc)
