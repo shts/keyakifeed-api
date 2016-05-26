@@ -54,6 +54,17 @@ module Api
       jbuilder :entries
     end
 
+    # get all reports
+    # /reports?limit=0&skip=30
+    get '/reports' do
+      content_type :json, :charset => 'utf-8'
+      
+      reports = Api::Report.offset(params[:skip].present? ? params[:skip] : 0)
+                .limit(params[:limit].present? ? params[:limit] : 30)
+                .order(published: :desc)
+      reports.to_json
+    end
+
     # Favorite
     # action 1 -> incriment
     # action -1 -> decriment
@@ -79,6 +90,7 @@ module Api
 
   end
 
+  # DBの設定
   class Member < ActiveRecord::Base
     has_many :entries
 
@@ -103,4 +115,6 @@ module Api
     belongs_to :member
   end
 
+  class Report < ActiveRecord::Base
+  end
 end

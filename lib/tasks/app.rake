@@ -9,5 +9,17 @@ namespace :app do
   task :create_entries do
     require './create_entries'
   end
-  
+
+  desc "*** Create All Report table by parsed Keyakizaka46.com ***"
+  task :create_reports do
+    require './create_reports'
+  end
+
+  desc "*** Create All table data by parsed Keyakizaka46.com ***"
+  task :create_all do
+    require './create_member'
+    require './create_entries'
+    require './create_reports'
+  end
+
 end
