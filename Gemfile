@@ -8,7 +8,9 @@ gem "rake"
 gem 'sqlite3'
 gem "tilt-jbuilder", :require => "sinatra/jbuilder"
 gem 'nokogiri'
+gem 'unicorn'
 gem 'addressable', require: 'addressable/uri'
+gem 'eventmachine'
 
 group :development do
   gem 'shotgun'
