@@ -13,7 +13,9 @@ module Api
       set :database, {adapter: "sqlite3", database: "db/api.db"}
     end
 
-    # routing
+    # -----------------------------------------------------
+    # Routing
+    # -----------------------------------------------------
     # get member
     get '/members' do
       Api::Member.all.to_json
@@ -45,7 +47,6 @@ module Api
     # get all entries
     # /entries?limit=0&skip=30
     get '/entries' do
-      #文字コード指定してやらないと日本語が化ける
     	content_type :json, :charset => 'utf-8'
 
       @entries = Api::Entry.offset(params[:skip].present? ? params[:skip] : 0)
@@ -58,7 +59,7 @@ module Api
     # /reports?limit=0&skip=30
     get '/reports' do
       content_type :json, :charset => 'utf-8'
-      
+
       reports = Api::Report.offset(params[:skip].present? ? params[:skip] : 0)
                 .limit(params[:limit].present? ? params[:limit] : 30)
                 .order(published: :desc)
@@ -117,4 +118,5 @@ module Api
 
   class Report < ActiveRecord::Base
   end
+
 end
