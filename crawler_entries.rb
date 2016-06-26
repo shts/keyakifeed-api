@@ -12,7 +12,7 @@ require 'eventmachine'
 require './app'
 
 ### デーモン化処理
-pid_file = "./crawler_entries.pid"
+pid_file = "./tmp/pids/crawler_entries.pid"
 # 第2引数にfalseを指定して標準出力を"/dev/null" へリダイレクトする
 Process.daemon(true, false)
 # 起動後にプロセスidを保持する

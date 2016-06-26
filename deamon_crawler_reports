@@ -1,8 +1,8 @@
 #!/bin/sh
 
-NAME="[ entries crawler ]"
-PID="./tmp/pids/crawler_entries.pid"
-CMD="ruby crawler_entries.rb"
+NAME="[ reports crawler ]"
+PID="./tmp/pids/crawler_reports.pid"
+CMD="ruby crawler_reports.rb"
 
 start()
 {

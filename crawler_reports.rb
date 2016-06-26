@@ -7,11 +7,19 @@ require "date"
 
 require "uri"
 
-require './app'
-
+require 'eventmachine'
 # http://qiita.com/yoshioota/items/4a58d977b4f89078d7d4
 #サムネイルURLにスペースが入っているので回避するためのGem
 require 'addressable/uri'
+
+require './app'
+
+### デーモン化処理
+pid_file = "./tmp/pids/crawler_reports.pid"
+# 第2引数にfalseを指定して標準出力を"/dev/null" へリダイレクトする
+Process.daemon(true, false)
+# 起動後にプロセスidを保持する
+open(pid_file, 'w') {|f| f << Process.pid} if pid_file
 
 BaseReportUrl = "http://www.keyakizaka46.com/mob/news/diarShw.php?cd=report"
 # http://www.keyakizaka46.com/mob/news/diarShw.php?cd=report
@@ -65,6 +73,7 @@ def save_data data
   data.each { |key, val|
     entry[key] = val
   }
+  #TODO 通知する
   result = entry.save
   yield(result) if block_given?
 end
@@ -98,3 +107,10 @@ def url_normalize url
 end
 
 get_all_report
+
+EM.run do
+  EM::PeriodicTimer.new(60) do
+    # 1ページのみ取得する
+    get_all_report
+  end
+end
