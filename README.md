@@ -36,11 +36,26 @@ $ sh deamon_crawler_entries start
 
 ### デーモンスクリプト操作
 
+実行権限を付与しておくこと
+
+```
+$ chmod +x deamon_crawler_entries
+```
+
+
 **開始**
 
 ```
 $ sh deamon_crawler_entries start
 ```
+
+or
+
+```
+$ ./deamon_crawler_entries start
+```
+
+
 **停止**
 
 ```
