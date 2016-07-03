@@ -89,6 +89,16 @@ module Api
       member.save
     end
 
+    # /matomes?limit=0&skip=30
+    get '/matomes' do
+      content_type :json, :charset => 'utf-8'
+
+      reports = Api::Matome.offset(params[:skip].present? ? params[:skip] : 0)
+                .limit(params[:limit].present? ? params[:limit] : 30)
+                .order(entry_published: :desc)
+      reports.to_json
+    end
+
   end
 
   # DBの設定
@@ -117,6 +127,9 @@ module Api
   end
 
   class Report < ActiveRecord::Base
+  end
+
+  class Matome < ActiveRecord::Base
   end
 
 end

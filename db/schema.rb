@@ -11,16 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160522114256) do
+ActiveRecord::Schema.define(version: 20160703032518) do
 
   create_table "entries", force: :cascade do |t|
     t.string   "title"
     t.string   "url"
     t.integer  "member_id"
-    t.date     "published"
+    t.datetime "published"
     t.string   "image_url_list"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+  end
+
+  create_table "matomes", force: :cascade do |t|
+    t.string   "feed_title"
+    t.string   "feed_url"
+    t.string   "feed_last_modified"
+    t.string   "entry_title"
+    t.string   "entry_url"
+    t.datetime "entry_published"
+    t.string   "image_url_list"
+    t.string   "entry_categories"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   create_table "members", force: :cascade do |t|

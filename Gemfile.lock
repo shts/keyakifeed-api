@@ -20,15 +20,29 @@ GEM
     bond (0.5.1)
     builder (3.2.2)
     eventmachine (1.2.0.1)
+    faraday (0.9.2)
+      multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.10.0)
+      faraday (>= 0.7.4, < 0.10)
+    feedbag (0.9.5)
+      nokogiri (~> 1.0)
+    feedjira (2.0.0)
+      faraday (~> 0.9)
+      faraday_middleware (~> 0.9)
+      loofah (~> 2.0)
+      sax-machine (~> 1.0)
     i18n (0.7.0)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
     json (1.8.3)
     kgio (2.10.0)
+    loofah (2.0.3)
+      nokogiri (>= 1.5.9)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     multi_json (1.11.2)
+    multipart-post (2.0.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     rack (1.6.4)
@@ -46,6 +60,7 @@ GEM
       rack (>= 1.0)
       rack-test (~> 0.6.2)
       ripl (>= 0.7.0)
+    sax-machine (1.3.2)
     shotgun (0.9.1)
       rack (>= 1.0)
     sinatra (1.4.7)
@@ -86,6 +101,8 @@ DEPENDENCIES
   activerecord
   addressable
   eventmachine
+  feedbag
+  feedjira
   nokogiri
   rake
   shotgun

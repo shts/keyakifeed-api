@@ -4,7 +4,7 @@ class CreateEntries < ActiveRecord::Migration
       t.string :title
       t.string :url
       t.integer :member_id
-      t.date :published
+      t.datetime :published
       t.string :image_url_list
 
       t.timestamps null: false
