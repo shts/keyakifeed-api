@@ -1,0 +1,48 @@
+#!/bin/sh
+
+NAME="[ reports crawler ]"
+PID="./tmp/pids/crawler_matomefeeds.pid"
+CMD="ruby crawler_matomefeeds.rb"
+
+start()
+{
+  if [ -e $PID ]; then
+    echo "$NAME already started"
+    exit 1
+  fi
+  echo "$NAME START!"
+  $CMD
+}
+
+stop()
+{
+  if [ ! -e $PID ]; then
+    echo "$NAME not started"
+    exit 1
+  fi
+  echo "$NAME STOP!"
+  kill -INT `cat ${PID}`
+  rm $PID
+}
+
+restart()
+{
+  stop
+  sleep 2
+  start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  *)
+    echo "Syntax Error: release [start|stop|restart]"
+    ;;
+esac

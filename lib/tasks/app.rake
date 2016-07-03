@@ -15,6 +15,11 @@ namespace :app do
     require './create_reports'
   end
 
+  desc "*** Create All Matome Feed table by parsed some matome sites ***"
+  task :create_matomefeeds do
+    require './create_matomefeeds'
+  end
+
   desc "*** Create All table data by parsed Keyakizaka46.com ***"
   task :create_all do
     require './create_member'

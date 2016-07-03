@@ -19,7 +19,7 @@ url_list = [
 ]
 
 ### デーモン化処理
-pid_file = "./tmp/pids/crawler_matomes.pid"
+pid_file = "./tmp/pids/crawler_matomefeeds.pid"
 # 第2引数にfalseを指定して標準出力を"/dev/null" へリダイレクトする
 Process.daemon(true, false)
 # 起動後にプロセスidを保持する
