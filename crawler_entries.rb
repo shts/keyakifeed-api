@@ -46,7 +46,7 @@ def parsepage url, loop=true
     data = {}
     data[:title] = normalize article.css('.box-ttl > h3').text
     data[:published] = normalize article.css('.box-bottom > ul > li')[0].text
-    data[:published] = Date.parse(data[:published])
+    data[:published] = DateTime.parse(data[:published])
 
     data[:url] = BaseUrl + article.css('.box-bottom > ul > li')[1].css('a')[0][:href]
     data[:url] = url_normalize data[:url]
