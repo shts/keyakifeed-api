@@ -1,9 +1,11 @@
 # db
-./db/api.db
-./db/schema.rb
+db/api.db
+db/schema.rb
 
 # log
-./log/*
+/log/*
+!/log/.gitkeep
 
 # pids
-./tmp/pids/*
+/tmp/pids/*
+!/tmp/pids/.gitkeep
