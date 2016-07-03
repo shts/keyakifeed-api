@@ -1,6 +1,6 @@
 #!/bin/sh
 
-NAME="[ reports crawler ]"
+NAME="[ matomefeeds crawler ]"
 PID="./tmp/pids/crawler_matomefeeds.pid"
 CMD="ruby crawler_matomefeeds.rb"
 
