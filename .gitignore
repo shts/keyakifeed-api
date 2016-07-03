@@ -1,0 +1,9 @@
+# db
+./db/api.db
+./db/schema.rb
+
+# log
+./log/*
+
+# pids
+./tmp/pids/*
