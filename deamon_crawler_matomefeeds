@@ -1,8 +1,13 @@
 #!/bin/sh
+# chkconfig: 345 90 20
+# description: crawler for keyakizaka46 matome feed entries
+# processname: crawler_entries
 
 NAME="[ matomefeeds crawler ]"
-PID="./tmp/pids/crawler_matomefeeds.pid"
+APP_ROOT_DIR="/var/www/app"
+PID="/var/www/app/tmp/pids/crawler_matomefeeds.pid"
 CMD="ruby crawler_matomefeeds.rb"
+USER=root
 
 start()
 {
@@ -11,7 +16,7 @@ start()
     exit 1
   fi
   echo "$NAME START!"
-  $CMD
+  sudo su -l ${USER} -c "cd ${APP_ROOT_DIR} && ${CMD}"
 }
 
 stop()

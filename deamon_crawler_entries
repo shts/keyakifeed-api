@@ -7,7 +7,7 @@ NAME="[ entries crawler ]"
 APP_ROOT_DIR="/var/www/app"
 PID="/var/www/app/tmp/pids/crawler_entries.pid"
 CMD="ruby crawler_entries.rb"
-USER=shts
+USER=root
 
 start()
 {
@@ -16,8 +16,7 @@ start()
     exit 1
   fi
   echo "$NAME START!"
-  #$CMD
-  sudo su -l ${USER} -c "source /etc/environment && cd ${APP_ROOT_DIR} && ${CMD}"
+  sudo su -l ${USER} -c "cd ${APP_ROOT_DIR} && ${CMD}"
 }
 
 stop()
