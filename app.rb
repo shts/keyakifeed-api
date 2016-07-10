@@ -101,7 +101,7 @@ module Api
 
     # FCM registeration id
     # curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"reg_id":"1"}' http://localhost:9292/registeration -w "\n%{http_code}\n"
-    post '/registeration', provides: :json do
+    post '/registration', provides: :json do
       params = JSON.parse request.body.read
 
       if !params['reg_id'].present? then
@@ -111,7 +111,7 @@ module Api
       fcm = Api::Fcm.where(reg_id: params['reg_id']).first
       if fcm != nil then
         status 555
-        body "{\"request\":\"registeration\", \"error\":\"already registeration\"}"
+        body "{\"request\":\"registration\", \"error\":\"already registration\"}"
         return
       end
 
@@ -122,7 +122,7 @@ module Api
 
     # FCM unregisteration id
     # curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"reg_id":"1"}' http://localhost:9292/unregisteration -w "\n%{http_code}\n"
-    post '/unregisteration', provides: :json do
+    post '/unregistration', provides: :json do
       params = JSON.parse request.body.read
 
       if !params['reg_id'].present? then
@@ -132,7 +132,7 @@ module Api
       fcm = Api::Fcm.where(reg_id: params['reg_id']).first
       if fcm == nil then
         status 555
-        body "{\"request\":\"unregisteration\", \"error\":\"already unregisteration\"}"
+        body "{\"request\":\"unregistration\", \"error\":\"already unregistration\"}"
         return
       end
 
