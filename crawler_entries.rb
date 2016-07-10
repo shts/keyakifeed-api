@@ -9,6 +9,8 @@ require "uri"
 
 require 'eventmachine'
 
+require 'gcm'
+
 require './app'
 
 ### デーモン化処理
@@ -111,10 +113,30 @@ end
 def routine_work
   Api::Member.all.order(key: :desc).each do |member|
     parse_for_key(member['key']) { |data|
-      # TODO: 通知する
-      save_data(data, member) if is_new? data
+      save_data(data, member) { |r, d|
+        push_notification d
+      } if is_new? data
     }
   end
+end
+
+def push_notification data
+
+  registeration_ids = Array.new
+  Api::Fcm.all.each do |fcm|
+    registeration_ids.push fcm['reg_id']
+  end
+
+  send_data = {}
+  e = Api::Entry.where(url: data[:url]).limit(1)
+  data.each { |key, val|
+    send_data[key] = val
+  }
+
+  gcm = GCM.new(API_KEY) # TODO: APIキーを設定するとこ
+  # :data の内容が extras に格納される
+  option = { :data => send_data }
+  gcm.send_notification(registration_ids, option)
 end
 
 # すべての記事を取得する

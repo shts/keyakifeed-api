@@ -99,6 +99,46 @@ module Api
       reports.to_json
     end
 
+    # FCM registeration id
+    # curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"reg_id":"1"}' http://localhost:9292/registeration -w "\n%{http_code}\n"
+    post '/registeration', provides: :json do
+      params = JSON.parse request.body.read
+
+      if !params['reg_id'].present? then
+        return status 500
+      end
+
+      fcm = Api::Fcm.where(reg_id: params['reg_id']).first
+      if fcm != nil then
+        status 555
+        body "{\"request\":\"registeration\", \"error\":\"already registeration\"}"
+        return
+      end
+
+      f = Fcm.new()
+      f.reg_id = params['reg_id']
+      f.save
+    end
+
+    # FCM unregisteration id
+    # curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"reg_id":"1"}' http://localhost:9292/unregisteration -w "\n%{http_code}\n"
+    post '/unregisteration', provides: :json do
+      params = JSON.parse request.body.read
+
+      if !params['reg_id'].present? then
+        return status 500
+      end
+
+      fcm = Api::Fcm.where(reg_id: params['reg_id']).first
+      if fcm == nil then
+        status 555
+        body "{\"request\":\"unregisteration\", \"error\":\"already unregisteration\"}"
+        return
+      end
+
+      fcm.destroy
+    end
+
   end
 
   # DBの設定
@@ -130,6 +170,9 @@ module Api
   end
 
   class Matome < ActiveRecord::Base
+  end
+
+  class Fcm < ActiveRecord::Base
   end
 
 end
