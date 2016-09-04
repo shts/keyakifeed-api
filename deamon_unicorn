@@ -1,5 +1,5 @@
 #!/bin/sh
-# chkconfig: 345 90 20
+# chkconfig: 2345 85 70
 # description: unicorn deamon
 # processname: unicorn_deamon
 
