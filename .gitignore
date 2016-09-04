@@ -12,3 +12,6 @@ db/schema.rb
 
 # debug
 test_push.rb
+
+# vender dir
+/vender/*
