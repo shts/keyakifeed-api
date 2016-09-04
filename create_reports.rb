@@ -26,39 +26,47 @@ def get_all_report
 end
 
 def fetch_report
-  page = Nokogiri::HTML(open(BaseReportUrl, 'User-Agent' => UserAgents.agent))
-  page.css('.box-sub').each do |box|
-    data = {}
-    # uri
-    #puts url_normalize "#{box.css('a')[0][:href]}"
-    # /mob/news/diarKijiShw.php?site=k46o&ima=5839&id=2539&cd=report
-    # "http://www.keyakizaka46.com" + box.css('a')[0][:href]
-    data[:url] = url_normalize box.css('a')[0][:href]
+  begin
+    page = Nokogiri::HTML(open(BaseReportUrl, 'User-Agent' => UserAgents.agent))
+    page.css('.box-sub').each do |box|
+      data = {}
+      # uri
+      #puts url_normalize "#{box.css('a')[0][:href]}"
+      # /mob/news/diarKijiShw.php?site=k46o&ima=5839&id=2539&cd=report
+      # "http://www.keyakizaka46.com" + box.css('a')[0][:href]
+      data[:url] = url_normalize box.css('a')[0][:href]
 
-    # thumbnail
-    # puts thumbnail_url_normalize "#{box.css('.box-img').css('img')[0][:src]}"
-    # thumbnail_url_normalize box.css('.box-img').css('img')[0][:src]
-    data[:thumbnail_url] = thumbnail_url_normalize box.css('.box-img').css('img')[0][:src]
+      # thumbnail
+      # puts thumbnail_url_normalize "#{box.css('.box-img').css('img')[0][:src]}"
+      # thumbnail_url_normalize box.css('.box-img').css('img')[0][:src]
+      data[:thumbnail_url] = thumbnail_url_normalize box.css('.box-img').css('img')[0][:src]
 
-    # title
-    # puts normalize "#{box.css('.box-txt').css('.ttl').css('p').text}"
-    data[:title] = normalize box.css('.box-txt').css('.ttl').css('p').text
+      # title
+      # puts normalize "#{box.css('.box-txt').css('.ttl').css('p').text}"
+      data[:title] = normalize box.css('.box-txt').css('.ttl').css('p').text
 
-    # published
-    # puts normalize "#{box.css('.box-txt').css('time').text}"
-    pub = normalize box.css('.box-txt').css('time').text
-    d = pub.split(".")
-    data[:published] = DateTime.new(d[0].to_i, d[1].to_i, d[2].to_i)
+      # published
+      # puts normalize "#{box.css('.box-txt').css('time').text}"
+      pub = normalize box.css('.box-txt').css('time').text
+      d = pub.split(".")
+      data[:published] = DateTime.new(d[0].to_i, d[1].to_i, d[2].to_i)
 
-    #image_url_list
-    data[:image_url_list] = Array.new()
-    article = Nokogiri::HTML(open(data[:url], 'User-Agent' => UserAgents.agent))
-    article.css('.box-content').css('img').each do |img|
-      image_url = thumbnail_url_normalize img[:src]
-      data[:image_url_list].push image_url
+      #image_url_list
+      data[:image_url_list] = Array.new()
+      article = Nokogiri::HTML(open(data[:url], 'User-Agent' => UserAgents.agent))
+      article.css('.box-content').css('img').each do |img|
+        image_url = thumbnail_url_normalize img[:src]
+        data[:image_url_list].push image_url
+      end
+
+      yield(data) if block_given?
     end
-
-    yield(data) if block_given?
+  rescue OpenURI::HTTPError => ex
+    puts "******************************************************************************************"
+    puts "HTTPError : url(#{url}) retry!!!"
+    puts "******************************************************************************************"
+    sleep 5
+    retry
   end
 end
 

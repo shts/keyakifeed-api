@@ -31,35 +31,44 @@ end
 def parsepage url, loop=true
   puts "parsepage in : #{url}"
 
-  page = Nokogiri::HTML(open(url, 'User-Agent' => UserAgents.agent))
+  begin
+    page = Nokogiri::HTML(open(url, 'User-Agent' => UserAgents.agent))
 
-  page.css('article').each do |article|
+    page.css('article').each do |article|
 
-    data = {}
-    data[:title] = normalize article.css('.box-ttl > h3').text
-    data[:published] = normalize article.css('.box-bottom > ul > li')[0].text
-    data[:published] = DateTime.parse(data[:published])
+      data = {}
+      data[:title] = normalize article.css('.box-ttl > h3').text
+      data[:published] = normalize article.css('.box-bottom > ul > li')[0].text
+      data[:published] = DateTime.parse(data[:published])
 
-    data[:url] = BaseUrl + article.css('.box-bottom > ul > li')[1].css('a')[0][:href]
-    data[:url] = url_normalize data[:url]
+      data[:url] = BaseUrl + article.css('.box-bottom > ul > li')[1].css('a')[0][:href]
+      data[:url] = url_normalize data[:url]
 
-    image_url_list = Array.new()
-    article.css('.box-article').css('img').each do |img|
-      image_url_list.push(BaseUrl + img[:src])
-    end
-    data[:image_url_list] = image_url_list
+      image_url_list = Array.new()
+      article.css('.box-article').css('img').each do |img|
+        image_url_list.push(BaseUrl + img[:src])
+      end
+      data[:image_url_list] = image_url_list
 
-    yield(data) if block_given?
-  end
-
-  return if !loop
-  puts "next page"
-
-  page.css('.pager > ul > li').each do |li|
-    puts "no more page" if li.text == '>'
-    parse(BaseUrl + li.css('a')[0][:href]) { |data|
       yield(data) if block_given?
-    } if li.text == '>'
+    end
+
+    return if !loop
+    puts "next page"
+
+    page.css('.pager > ul > li').each do |li|
+      puts "no more page" if li.text == '>'
+      parse(BaseUrl + li.css('a')[0][:href]) { |data|
+        yield(data) if block_given?
+      } if li.text == '>'
+    end
+
+  rescue OpenURI::HTTPError => ex
+    puts "******************************************************************************************"
+    puts "HTTPError : url(#{url}) retry!!!"
+    puts "******************************************************************************************"
+    sleep 5
+    retry
   end
 end
 

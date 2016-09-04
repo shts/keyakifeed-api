@@ -8,7 +8,7 @@ require './app'
 
 require_relative 'useragent'
 
-Max = 23
+Max = 34
 BaseUrl = "http://www.keyakizaka46.com"
 # http://www.keyakizaka46.com/mob/arti/artiShw.php?cd=01
 BaseProfileUrl = "http://www.keyakizaka46.com/mob/arti/artiShw.php?cd="
@@ -37,43 +37,50 @@ def update data
 end
 
 def parse(num)
+  begin
+    data = {}
+    data[:key] = num
 
-  data = {}
-  data[:key] = num
+    url = BaseProfileUrl + num
+    doc = Nokogiri::HTML(open(url, 'User-Agent' => UserAgents.agent))
 
-  url = BaseProfileUrl + num
-  doc = Nokogiri::HTML(open(url, 'User-Agent' => UserAgents.agent))
-
-  status = Array.new()
-  doc.css('ul.tag').each do |tag|
-    status.push(tag.css('li').text)
-  end
-  data[:status] = status
-
-  data[:name_main] = normalize doc.css('.box-profile_text').css('.name').text
-  data[:name_sub] = normalize doc.css('.box-profile_text').css('.furigana').text
-  # 公式バグ
-  #puts doc.css('.box-profile_text').css('.en').text.gsub(/(\r\n|\r|\n|\f)/,"")
-  data[:image_url] = BaseUrl + doc.css('.box-profile_img > img')[0][:src]
-  data[:message_url] = BaseUrl + doc.css('.box-msg').css('.slide').css('img')[0][:src]
-
-  counter = 0
-  doc.css('.box-profile_text').css('.box-info').css('dl').css('dt').each do |child|
-    if counter == 0 then
-      data[:birthday] = normalize child.text.gsub("年", "/").gsub("月", "/").gsub("日", "")
-    elsif counter == 1
-      data[:constellation] = normalize child.text
-    elsif counter == 2
-      data[:height] = normalize child.text
-    elsif counter == 3
-      data[:birthplace] = normalize child.text
-    elsif counter == 4
-      data[:blood_type] = normalize child.text
+    status = Array.new()
+    doc.css('ul.tag').each do |tag|
+      status.push(tag.css('li').text)
     end
-    counter = counter + 1
-  end
+    data[:status] = status
 
-  yield(data) if block_given?
+    data[:name_main] = normalize doc.css('.box-profile_text').css('.name').text
+    data[:name_sub] = normalize doc.css('.box-profile_text').css('.furigana').text
+    # 公式バグ
+    #puts doc.css('.box-profile_text').css('.en').text.gsub(/(\r\n|\r|\n|\f)/,"")
+    data[:image_url] = BaseUrl + doc.css('.box-profile_img > img')[0][:src]
+    data[:message_url] = BaseUrl + doc.css('.box-msg').css('.slide').css('img')[0][:src]
+
+    counter = 0
+    doc.css('.box-profile_text').css('.box-info').css('dl').css('dt').each do |child|
+      if counter == 0 then
+        data[:birthday] = normalize child.text.gsub("年", "/").gsub("月", "/").gsub("日", "")
+      elsif counter == 1
+        data[:constellation] = normalize child.text
+      elsif counter == 2
+        data[:height] = normalize child.text
+      elsif counter == 3
+        data[:birthplace] = normalize child.text
+      elsif counter == 4
+        data[:blood_type] = normalize child.text
+      end
+      counter = counter + 1
+    end
+    yield(data) if block_given?
+
+  rescue OpenURI::HTTPError => ex
+    puts "******************************************************************************************"
+    puts "HTTPError : url(#{url}) retry!!!"
+    puts "******************************************************************************************"
+    sleep 5
+    retry
+  end
 end
 
 def normalize str
