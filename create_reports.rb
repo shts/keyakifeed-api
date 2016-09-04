@@ -13,6 +13,8 @@ require './app'
 #サムネイルURLにスペースが入っているので回避するためのGem
 require 'addressable/uri'
 
+require_relative 'useragent'
+
 BaseReportUrl = "http://www.keyakizaka46.com/mob/news/diarShw.php?cd=report"
 # http://www.keyakizaka46.com/mob/news/diarShw.php?cd=report
 # http://www.keyakizaka46.com/mob/news/diarKijiShw.php?cd=report
@@ -24,7 +26,7 @@ def get_all_report
 end
 
 def fetch_report
-  page = Nokogiri::HTML(open(BaseReportUrl))
+  page = Nokogiri::HTML(open(BaseReportUrl, 'User-Agent' => UserAgents.agent))
   page.css('.box-sub').each do |box|
     data = {}
     # uri
@@ -50,7 +52,7 @@ def fetch_report
 
     #image_url_list
     data[:image_url_list] = Array.new()
-    article = Nokogiri::HTML(open(data[:url]))
+    article = Nokogiri::HTML(open(data[:url], 'User-Agent' => UserAgents.agent))
     article.css('.box-content').css('img').each do |img|
       image_url = thumbnail_url_normalize img[:src]
       data[:image_url_list].push image_url

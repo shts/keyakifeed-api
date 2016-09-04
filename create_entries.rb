@@ -9,6 +9,8 @@ require "uri"
 
 require './app'
 
+require_relative 'useragent'
+
 #OfficialSiteUrl = "http://blog.keyakizaka46.com/mob/news/diarKiji.php?site=k46&cd=member"
 BaseUrl = "http://www.keyakizaka46.com"
 BlogBaseUrl = "http://www.keyakizaka46.com/mob/news/diarKiji.php?cd=member&ct="
@@ -29,7 +31,7 @@ end
 def parsepage url, loop=true
   puts "parsepage in : #{url}"
 
-  page = Nokogiri::HTML(open(url))
+  page = Nokogiri::HTML(open(url, 'User-Agent' => UserAgents.agent))
 
   page.css('article').each do |article|
 

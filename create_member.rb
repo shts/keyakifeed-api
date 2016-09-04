@@ -6,6 +6,8 @@ require 'nokogiri'
 
 require './app'
 
+require_relative 'useragent'
+
 Max = 23
 BaseUrl = "http://www.keyakizaka46.com"
 # http://www.keyakizaka46.com/mob/arti/artiShw.php?cd=01
@@ -40,7 +42,7 @@ def parse(num)
   data[:key] = num
 
   url = BaseProfileUrl + num
-  doc = Nokogiri::HTML(open(url))
+  doc = Nokogiri::HTML(open(url, 'User-Agent' => UserAgents.agent))
 
   status = Array.new()
   doc.css('ul.tag').each do |tag|

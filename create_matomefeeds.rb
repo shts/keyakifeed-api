@@ -24,6 +24,8 @@ require "feedjira"
 
 require "./app"
 
+require_relative 'useragent'
+
 url_list = [
   "http://keyakizaka46ch.jp",
   "http://keyakizaka1.blog.jp",

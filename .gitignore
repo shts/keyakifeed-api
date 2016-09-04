@@ -9,3 +9,6 @@ db/schema.rb
 # pids
 /tmp/pids/*
 !/tmp/pids/.gitkeep
+
+# debug
+test_push.rb
