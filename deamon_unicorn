@@ -30,10 +30,33 @@ stop()
   rm $PID
 }
 
+force_stop()
+{
+  if [ ! -e ${PID} ]; then
+    echo "${NAME} not started"
+    exit 1
+  fi
+  echo "stop ${NAME}"
+  kill -INT `cat ${PID}`
+}
+
+reload()
+{
+  if [ ! -e ${PID} ]; then
+    echo "${NAME} not started"
+    start
+    exit 0
+  fi
+  echo "reload ${NAME}"
+  kill -USR2 `cat ${PID}`
+}
+
 restart()
 {
-  stop
-  sleep 2
+  if [ -e ${PID} ]; then
+    stop
+    sleep 3
+  fi
   start
 }
 
@@ -44,10 +67,16 @@ case "$1" in
   stop)
     stop
     ;;
+  force-stop)
+    force_stop
+    ;;
+  reload)
+    reload
+    ;;
   restart)
     restart
     ;;
   *)
-    echo "Syntax Error: release [start|stop|restart]"
+    echo "Syntax Error: release [start|stop|force-stop|reload|restart]"
     ;;
 esac
