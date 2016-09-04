@@ -1,5 +1,5 @@
 #!/bin/sh
-# chkconfig: 345 90 20
+# chkconfig: 345 65 25
 # description: crawler for keyakizaka46 matome feed entries
 # processname: crawler_entries
 
