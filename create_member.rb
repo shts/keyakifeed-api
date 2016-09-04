@@ -25,7 +25,8 @@ def get_all_member
 end
 
 def update data
-  if Api::Member.where("key = ?", data[:key]).first == nil then
+  member = Api::Member.where("key = ?", data[:key]).first
+  if member == nil then
     new_member = Api::Member.new
     data.each { |key, val|
       new_member[key] = val
@@ -33,6 +34,10 @@ def update data
     new_member.save
   else
     puts "already registration"
+    # 画像とメッセージを更新
+    member.image_url = data[:image_url]
+    member.message_url = data[:message_url]
+    puts member.save
   end
 end
 
