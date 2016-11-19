@@ -6,7 +6,7 @@ require 'eventmachine'
 
 require "./app"
 
-ROUTINE_TIME = 60 * 30 #30分
+ROUTINE_TIME = 60 * 10 #10分
 
 URL_LIST = [
   "http://keyakizaka46ch.jp",
@@ -55,7 +55,7 @@ def fetch_rss_feed
 end
 
 EM.run do
-  EM::PeriodicTimer.new(10) do
+  EM::PeriodicTimer.new(ROUTINE_TIME) do
     fetch_rss_feed
   end
 end
