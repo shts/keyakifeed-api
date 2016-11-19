@@ -6,7 +6,7 @@
 NAME="[ unicorn_deamon ]"
 APP_ROOT_DIR="/var/www/app"
 PID="/var/www/app/tmp/pids/unicorn.pid"
-CMD="bundle exec unicorn -c unicorn.rb -D"
+CMD="unicorn -c unicorn.rb -D"
 USER=root
 
 start()
@@ -17,7 +17,7 @@ start()
   fi
   echo "$NAME START!"
   cd $APP_ROOT_DIR
-  $CMD
+  sudo su -l ${USER} -c "cd ${APP_ROOT_DIR} && ${CMD}"
 }
 
 stop()
