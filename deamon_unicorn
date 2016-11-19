@@ -16,7 +16,8 @@ start()
     exit 1
   fi
   echo "$NAME START!"
-  sudo su -l ${USER} -c "cd ${APP_ROOT_DIR} && ${CMD}"
+  cd $APP_ROOT_DIR
+  $CMD
 }
 
 stop()
