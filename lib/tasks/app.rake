@@ -25,6 +25,7 @@ namespace :app do
     require './create_member'
     require './create_entries'
     require './create_reports'
+    require './create_matomefeeds'
   end
 
 end
